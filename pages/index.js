@@ -20,6 +20,29 @@ export default function Home() {
 	const [conversationId, setConversationId] = useState(null);
 	const [jobId, setJobId] = useState(null);
 	const [status, setStatus] = useState('not started');
+	const [messages, setMessages] = useState('');
+
+	const getTranscripts = async () => {
+		const rawResult = await fetch(
+			`https://api.symbl.ai/v1/conversations/${conversationId}/messages`,
+			{
+				method: 'GET',
+				headers: {
+					'x-api-key': token,
+					'Content-Type': 'application/json',
+				},
+				mode: 'cors',
+			}
+		);
+		const result = await rawResult.json();
+		setMessages(result.messages);
+	};
+
+	useEffect(() => {
+		if (status === 'completed') {
+			getTranscripts();
+		}
+	}, [status]);
 
 	// in case we need a reference to the video in the future
 	const videoRef = useRef(null);
