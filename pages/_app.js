@@ -1,4 +1,5 @@
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { AuthProvider } from '../hooks';
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -14,9 +15,11 @@ const theme = extendTheme({ colors });
 // 3. Pass the `theme` prop to the `ChakraProvider`
 function MyApp({ Component, pageProps }) {
 	return (
-		<ChakraProvider resetCss theme={theme}>
-			<Component {...pageProps} />
-		</ChakraProvider>
+		<AuthProvider>
+			<ChakraProvider resetCss theme={theme}>
+				<Component {...pageProps} />
+			</ChakraProvider>
+		</AuthProvider>
 	);
 }
 
