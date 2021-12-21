@@ -1,5 +1,5 @@
+import { useRef, useState, useEffect } from 'react';
 import Head from 'next/head';
-import Header from '../components/header';
 import {
 	Button,
 	Container,
@@ -14,16 +14,33 @@ import {
 import ProtectedPage from '../components/protectedPage';
 
 export default function Home() {
+	const [file, setFile] = useState('');
+	const [videoSrc, setVideoSrc] = useState('');
+
+	// in case we need a reference to the video in the future
+	const videoRef = useRef(null);
+
+	useEffect(() => {
+		const src = URL.createObjectURL(new Blob([file], { type: 'video/mp4' }));
+		setVideoSrc(src);
+	}, [file]);
+
 	return (
 		<ProtectedPage>
 			<Container maxWidth='1200px'>
 				<Box margin='1rem'>
 					<InputGroup marginBottom='2rem'>
-						<Input type='file' id='input' accept='video/*' />
+						<Input
+							type='file'
+							id='input'
+							accept='video/*'
+							ref={videoRef}
+							onChange={(e) => setFile(e.target.files[0])}
+						/>
 					</InputGroup>
 					<Box bg='lightgrey' marginBottom='1rem'>
-						<AspectRatio maxH='400px' ration={16 / 9}>
-							<div>Video Component</div>
+						<AspectRatio maxH='100%' ratio={16 / 9}>
+							<video id='video-summary' controls src={videoSrc} />
 						</AspectRatio>
 					</Box>
 					<Button>Send for Processing</Button>
