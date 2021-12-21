@@ -1,32 +1,67 @@
 import React, { useState } from 'react';
-import { Container, Button, Input, Stack } from '@chakra-ui/react';
+import {
+	Container,
+	Button,
+	Input,
+	Stack,
+	FormLabel,
+	Box,
+} from '@chakra-ui/react';
 import Header from './header';
 
 const ProtectedPage = ({ children }) => {
-	const isLoggedIn = false;
 	const [appId, setAppId] = useState('');
 	const [appSecret, setAppSecret] = useState('');
+	const [token, setToken] = useState('');
+
+	const isLoggedIn = token;
+
+	const loginToSymbl = async () => {
+		const response = await fetch('https://api.symbl.ai/oauth2/token:generate', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			mode: 'cors',
+			body: JSON.stringify({
+				type: 'application',
+				appId,
+				appSecret,
+			}),
+		});
+
+		const json = await response.json();
+		setToken(json.accessToken);
+		console.log(json);
+	};
 
 	return (
 		<>
 			<Header />
 			{!isLoggedIn ? (
 				<Container>
-					<Stack spacing={3} marginBottom='1rem'>
-						<Input
-							placeholder='appId'
-							size='md'
-							value={appId}
-							onChange={(e) => setAppId(e.target.value)}
-						/>
-						<Input
-							placeholder='appSecret'
-							size='md'
-							value={appSecret}
-							onChange={(e) => setAppSecret(e.target.value)}
-						/>
+					<Stack spacing={2} marginBottom='1rem'>
+						<Box marginBottom='1rem'>
+							<FormLabel>App ID</FormLabel>
+							<Input
+								placeholder='appId'
+								size='md'
+								value={appId}
+								onChange={(e) => setAppId(e.target.value)}
+							/>
+						</Box>
+						<Box>
+							<FormLabel>App Secret</FormLabel>
+							<Input
+								type='password'
+								placeholder='appSecret'
+								size='md'
+								value={appSecret}
+								onChange={(e) => setAppSecret(e.target.value)}
+							/>
+						</Box>
 					</Stack>
-					<Button>Login</Button>
+					<Button onClick={() => loginToSymbl()}>Login</Button>
 				</Container>
 			) : (
 				children
