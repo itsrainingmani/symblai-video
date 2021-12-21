@@ -10,6 +10,10 @@ import {
 	InputGroup,
 	Input,
 	Heading,
+	List,
+	ListItem,
+	Text,
+	Badge,
 } from '@chakra-ui/react';
 import ProtectedPage from '../components/protectedPage';
 import { useAuth, useInterval } from '../hooks';
@@ -20,7 +24,7 @@ export default function Home() {
 	const [conversationId, setConversationId] = useState(null);
 	const [jobId, setJobId] = useState(null);
 	const [status, setStatus] = useState('not started');
-	const [messages, setMessages] = useState('');
+	const [messages, setMessages] = useState([]);
 
 	const getTranscripts = async () => {
 		const rawResult = await fetch(
@@ -115,7 +119,7 @@ export default function Home() {
 				<Divider orientation='horizontal' />
 				<Heading>Processing Data</Heading>
 				<SimpleGrid
-					columns={2}
+					// columns={2}
 					spacingX='40px'
 					spacingY='20px'
 					marginTop='1rem'
@@ -125,6 +129,22 @@ export default function Home() {
 							<Heading as='h4' size='md'>
 								Transcripts pulled from Conversation API
 							</Heading>
+							<List spacing={3} margin='2rem'>
+								{messages.map((message) => (
+									<ListItem key={message.id}>
+										<Container>
+											<Text fontSize='lg'>{message.text}</Text>
+											<Badge colorScheme='green'>
+												{`${new Date(
+													message.startTime
+												).toDateString()} ${new Date(
+													message.startTime
+												).toTimeString()}`}
+											</Badge>
+										</Container>
+									</ListItem>
+								))}
+							</List>
 						</Container>
 					</Box>
 				</SimpleGrid>
