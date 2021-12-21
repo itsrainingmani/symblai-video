@@ -16,7 +16,6 @@ import ProtectedPage from '../components/protectedPage';
 export default function Home() {
 	return (
 		<ProtectedPage>
-			<Header />
 			<Container maxWidth='1200px'>
 				<Box margin='1rem'>
 					<InputGroup marginBottom='2rem'>
