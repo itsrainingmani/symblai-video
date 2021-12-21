@@ -11,10 +11,11 @@ import {
 	Input,
 	Heading,
 } from '@chakra-ui/react';
+import ProtectedPage from '../components/protectedPage';
 
 export default function Home() {
 	return (
-		<>
+		<ProtectedPage>
 			<Header />
 			<Container maxWidth='1200px'>
 				<Box margin='1rem'>
@@ -45,6 +46,6 @@ export default function Home() {
 					</Box>
 				</SimpleGrid>
 			</Container>
-		</>
+		</ProtectedPage>
 	);
 }
