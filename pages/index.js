@@ -26,6 +26,54 @@ export default function Home() {
 	const [status, setStatus] = useState('not started');
 	const [messages, setMessages] = useState([]);
 
+	const getInsights = async () => {
+		const rawResult = await fetch(
+			`https://api.symbl.ai/v1/conversations/${conversationId}/insights`,
+			{
+				method: 'GET',
+				headers: {
+					'x-api-key': token,
+					'Content-Type': 'application/json',
+				},
+				mode: 'cors',
+			}
+		);
+		const result = await rawResult.json();
+		console.log('insights', result);
+	};
+
+	const getQuestions = async () => {
+		const rawResult = await fetch(
+			`https://api.symbl.ai/v1/conversations/${conversationId}/questions`,
+			{
+				method: 'GET',
+				headers: {
+					'x-api-key': token,
+					'Content-Type': 'application/json',
+				},
+				mode: 'cors',
+			}
+		);
+		const result = await rawResult.json();
+		console.log('questions', result);
+	};
+
+	const getFollowups = async () => {
+		const rawResult = await fetch(
+			`https://api.symbl.ai/v1/conversations/${conversationId}/follow-ups`,
+			{
+				method: 'GET',
+				headers: {
+					'x-api-key': token,
+					'Content-Type': 'application/json',
+				},
+				mode: 'cors',
+			}
+		);
+		const result = await rawResult.json();
+		console.log('followup', result);
+	};
+
 	const getTranscripts = async () => {
 		const rawResult = await fetch(
 			`https://api.symbl.ai/v1/conversations/${conversationId}/messages`,
@@ -45,6 +93,9 @@ export default function Home() {
 	useEffect(() => {
 		if (status === 'completed') {
 			getTranscripts();
+			getInsights();
+			getQuestions();
+			getFollowups();
 		}
 	}, [status]);
 
